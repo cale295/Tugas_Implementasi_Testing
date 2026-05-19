@@ -24,7 +24,7 @@ export default function Navbar() {
           </a>
 
           <a
-            href="#products"
+            href="#produk"
             className="hover:text-cyan-400 transition"
           >
             Products
