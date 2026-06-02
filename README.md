@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GameHub - Premium Gaming Gear E-Commerce
 
-## Getting Started
+**GameHub** adalah platform e-commerce modern yang didedikasikan untuk penjualan perlengkapan gaming (gaming gear) premium. Aplikasi ini dibangun menggunakan teknologi web modern seperti **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, **Supabase**, serta mengintegrasikan **AI Recommendation Assistant** yang cerdas berbasis model **Llama 3.1 8B Instruct** melalui Hugging Face Inference API.
 
-First, run the development server:
+---
+
+## 🚀 Fitur Utama
+
+1. **Katalog Produk Dinamis**
+   - Data produk dan kategori dimuat secara *real-time* dari database **Supabase**.
+   - Menyediakan fitur penyaringan (*filtering*) produk berdasarkan kategori secara interaktif.
+   - Deteksi otomatis status ketersediaan barang (Stok Habis, Stok Menipis, atau Tersedia).
+
+2. **Sistem Keranjang Belanja (React Context)**
+   - Manajemen keranjang belanja secara global menggunakan React Context API.
+   - Validasi ketat terhadap jumlah pembelian agar tidak melebihi stok yang tersedia di database.
+   - Fitur untuk menambah, mengurangi, dan menghapus item langsung dari halaman keranjang.
+   - Penyimpanan data keranjang secara otomatis di `localStorage` (inklusif penanganan hidrasi SSR untuk mencegah mismatch).
+
+3. **Formulir Checkout & Simulasi Transaksi**
+   - Halaman khusus `/cart` yang memuat ringkasan detail belanja.
+   - Form checkout yang dilengkapi dengan validasi input yang ketat (seperti format nomor telepon Indonesia dan panjang karakter minimal alamat/nama).
+   - Menghasilkan output tanda terima transaksi dalam format data **JSON terstruktur** setelah checkout berhasil dikonfirmasi.
+
+4. **GameHub AI Chatbot Assistant**
+   - Asisten rekomendasi belanja virtual yang berada di bagian sudut kanan bawah halaman.
+   - Mampu memberikan rekomendasi dan komparasi spesifik berdasarkan produk nyata yang tersimpan di database.
+   - Dilengkapi pendeteksi pertanyaan lanjutan (*follow-up*) untuk merespon diskusi komparasi dari pengguna secara kontekstual.
+   - Ditenagai oleh model LLM **Llama-3.1-8B-Instruct** yang dihubungkan melalui Hugging Face.
+
+5. **Antarmuka Premium & Responsif**
+   - Desain estetis bertema futuristik gelap (*dark mode*) yang disukai para gamer.
+   - Responsif di berbagai perangkat (Mobile, Tablet, Desktop).
+   - Animasi mikro (*micro-animations*) halus, efek *glassmorphism*, dan transisi interaktif menggunakan **Tailwind CSS v4**.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Framework Utama:** [Next.js 16.2.4 (App Router)](https://nextjs.org/)
+* **Library Frontend:** [React 19.2.4](https://react.dev/)
+* **Database & BaaS:** [Supabase SDK](https://supabase.com/) (`@supabase/supabase-js`)
+* **Kecerdasan Buatan:** [Hugging Face Inference](https://huggingface.co/) (`@huggingface/inference`)
+* **Styling & Ikon:** [Tailwind CSS v4](https://tailwindcss.com/) & [Lucide React](https://lucide.dev/)
+
+---
+
+## 📂 Struktur Direktori Utama
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+tugasimp/
+├── app/                      # Next.js App Router Pages & API Routes
+│   ├── api/chat/route.ts     # API Endpoint untuk integrasi chatbot Llama-3.1
+│   ├── cart/page.tsx         # Halaman Keranjang Belanja & Form Checkout
+│   ├── login/page.tsx        # Halaman Login (Simulasi)
+│   ├── signup/page.tsx       # Halaman Pendaftaran (Simulasi)
+│   ├── layout.tsx            # Root Layout pembungkus aplikasi (termasuk Provider)
+│   └── page.tsx              # Halaman Utama (Homepage)
+├── components/               # Komponen UI Reusable
+│   ├── AddToCartButton.tsx   # Tombol dinamis dengan validasi stok
+│   ├── ChatProductCard.tsx   # Card produk yang direkomendasikan di dalam chat
+│   ├── ChatWidget.tsx        # Widget Chatbot AI interaktif di sudut layar
+│   ├── Footer.tsx            # Footer aplikasi
+│   ├── Hero.tsx              # Bagian atas halaman utama dengan jargon & banner
+│   ├── Navbar.tsx            # Navigasi sticky dengan badge jumlah keranjang
+│   └── ProductSection.tsx    # Bagian katalog produk dengan filter kategori
+├── context/                  # Pengaturan State Global
+│   └── CartContext.tsx       # Provider untuk logika keranjang (Cart State)
+├── lib/                      # Inisialisasi Klien Eksternal
+│   └── supabase.ts           # Konfigurasi Supabase Client
+└── package.json              # Daftar dependensi dan script aplikasi
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Persyaratan Awal & Konfigurasi `.env.local`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sebelum menjalankan aplikasi, Anda perlu menyiapkan berkas konfigurasi `.env.local` di root direktori proyek ini. Masukkan variabel lingkungan berikut:
 
-## Learn More
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 
-To learn more about Next.js, take a look at the following resources:
+# Hugging Face AI Configuration
+HUGGINGFACE_API_KEY=your-huggingface-api-key
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Cara Menjalankan Project Secara Lokal
 
-## Deploy on Vercel
+1. **Clone repositori ini** (atau buka direktori project).
+2. **Install Dependensi:**
+   Menggunakan npm untuk mengunduh modul-modul yang dibutuhkan:
+   ```bash
+   npm install
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Jalankan Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Aplikasi akan berjalan secara lokal di [http://localhost:3000](http://localhost:3000).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Build untuk Produksi (Opsional):**
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+---
+
+## 💡 Informasi Tambahan Simulasi
+- **Checkout Flow:** Transaksi yang dilakukan di situs ini bersifat **simulasi**. Ketika Anda mengisi form checkout dan melakukan konfirmasi, keranjang belanja Anda akan dikosongkan secara otomatis dan sistem akan menghasilkan file JSON berisi rincian data transaksi Anda (yang dapat disalin/diekspor). Tidak ada transaksi finansial nyata atau data yang disimpan permanen di database penjualan.
