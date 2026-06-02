@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import ChatProductCard from "./ChatProductCard";
 
 type Category = {
   name: string;
@@ -14,6 +15,7 @@ type Product = {
   brand: string;
   price: number;
   image_url: string;
+  stock: number;
   short_description?: string;
   categories?: Category | Category[] | null;
 };
@@ -163,36 +165,7 @@ export default function ChatWidget() {
                 {msg.products && msg.products.length > 0 && (
                   <div className="mt-3 space-y-3">
                     {msg.products.map((product) => (
-                      <div
-                        key={product.id}
-                        className="bg-zinc-800 border border-zinc-700 rounded-xl overflow-hidden hover:border-cyan-500 transition"
-                      >
-                        <img
-                          src={product.image_url}
-                          alt={product.name}
-                          className="w-full h-40 object-cover"
-                        />
-                        <div className="p-3">
-                          <p className="font-semibold text-white text-sm">
-                            {product.name}
-                          </p>
-                          <p className="text-xs text-zinc-400 mt-0.5">
-                            {product.brand} · {getCategoryName(product)}
-                          </p>
-                          {product.short_description && (
-                            <p className="text-xs text-zinc-500 mt-1 line-clamp-2">
-                              {product.short_description}
-                            </p>
-                          )}
-                          <p className="text-cyan-400 text-sm font-semibold mt-2">
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                              maximumFractionDigits: 0,
-                            }).format(product.price)}
-                          </p>
-                        </div>
-                      </div>
+                      <ChatProductCard key={product.id} product={product} />
                     ))}
                   </div>
                 )}

@@ -17,6 +17,7 @@ type Product = {
   brand: string;
   price: number;
   image_url: string;
+  stock: number;
   short_description: string;
   category_id: string | null;
   categories: Category | Category[] | null;
@@ -65,6 +66,7 @@ export async function POST(req: Request) {
         brand,
         price,
         image_url,
+        stock,
         short_description,
         category_id,
         categories (
